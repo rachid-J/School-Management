@@ -17,18 +17,31 @@ class UserController extends Controller
         ]);
     
         $token = JWTAuth::attempt($validated);
+        $user = JWTAuth::user();
+        $user->load('roleable');
         if ($token) {
-          
-            
-            $user = JWTAuth::user()->load('roleable');
-           
             return response([
                 "token" => $token,
-                "user"  => $user,
-                "role" => class_basename($user->roleable_type)
+                'role' => class_basename($user->roleable_type)
             ], 201);
         } else {
             return response(["error" => "Invalid credentials"], 401);
         }
+    }
+
+    public function Me() {
+        $user = JWTAuth::user();
+    
+        if (!$user) {
+            return response()->json(['error' => 'Not authorized'], 401);
+        }
+    
+        $info = $user->load('roleable');
+    
+        return response()->json([
+            'role' => class_basename($user->roleable_type),
+            "me"=>  $info->roleable
+
+        ]);
     }
 }

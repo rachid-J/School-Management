@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
 
     protected $hidden = [
         'password',
+        "roleable_type",
     ];
     
     public function setPasswordAttribute(string $password): void

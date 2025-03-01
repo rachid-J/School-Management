@@ -8,3 +8,8 @@ Route::prefix('/user')->group( function () {
     Route::post('/login',[UserController::class,"Login"]);
 
 });
+
+Route::middleware("auth:api")->prefix('/user')->group(function(){
+        Route::post('/logout',[UserController::class,"Logout"]);
+        Route::get('/me',[UserController::class,"Me"]);
+});
